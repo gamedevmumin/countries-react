@@ -1,10 +1,16 @@
+import React, { useState } from "react";
 import Head from "next/head";
 import { ColorModeScript, Center } from "@chakra-ui/react";
 import theme from "../utilities/theme";
 import Navbar from "../components/navbar";
 import CountriesGrid from "../components/countriesGrid";
+import Filtering from "../components/filtering";
+import { useDebounce } from "use-debounce";
 
 export default function Home() {
+  const [searchPhrase, setSearchPhrase] = useState("");
+  const [region, setRegion] = useState("");
+  const [debouncedSearchPhrase] = useDebounce(searchPhrase, 300);
   return (
     <div>
       <Head>
@@ -14,9 +20,12 @@ export default function Home() {
       </Head>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <Navbar />
+      <Center>
+        <Filtering setSearchPhrase={setSearchPhrase} setRegion={setRegion} />
+      </Center>
       <main>
         <Center>
-          <CountriesGrid />
+          <CountriesGrid searchPhrase={debouncedSearchPhrase} region={region} />
         </Center>
       </main>
 
